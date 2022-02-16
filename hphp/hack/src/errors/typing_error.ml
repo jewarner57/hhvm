@@ -180,6 +180,9 @@ module Common = struct
     | (`static, pos, v) -> Render.suggestion_message orig v pos
 
   let smember_not_found pos kind member_name class_name class_pos hint =
+    let () = 
+    printf "common smember \n" 
+    in
     let msg =
       Printf.sprintf
         "No %s %s in %s"
@@ -2471,8 +2474,18 @@ module Primary = struct
       [],
       [] )
 
-  let invalid_type_hint pos =
-    (Error_code.InvalidTypeHint, (pos, "Invalid type hint"), [], [])
+  let invalid_type_hint pos  =
+    let quickfix = 
+        Quickfix.make 
+          ~title: ("Change type to " ^ Markdown_lite.md_codify("Test")) 
+          ~new_text:"this::Test" 
+          pos
+    in
+    let () = 
+      printf "Invalid Type Hint Fix: %s \n"
+      (Quickfix.show quickfix)
+    in
+    (Error_code.InvalidTypeHint, (pos, "Invalid type hint"), [], [quickfix])
 
   let unsatisfied_req pos trait_pos req_name req_pos =
     let reasons =
@@ -6481,8 +6494,25 @@ end = struct
 
   let smember_not_found
       pos kind member_name class_name class_pos hint quickfixes =
+    let fixcount = 
+      List.length quickfixes
+    in
+    let () = 
+      printf "Total Fixes: %s %s\n" 
+      (string_of_int fixcount)
+      (Pos_or_decl.show pos)
+    in
     let (code, claim, reasons) =
       Common.smember_not_found pos kind member_name class_name class_pos hint
+    in
+    let unsafe_pos = Pos_or_decl.unsafe_to_raw_pos pos in
+    let quickfixes =
+      [
+        Quickfix.make 
+          ~title: ("Change type to " ^ Markdown_lite.md_codify(class_name)) 
+          ~new_text:class_name
+          unsafe_pos
+      ]
     in
     (code, claim :: reasons, quickfixes)
 

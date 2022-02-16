@@ -99,9 +99,31 @@ let abstract_or_exact env id ({ name; _ } as abstr) =
     upper bound of the base. *)
 let create_root_from_type_constant ctx env root (_class_pos, class_name) class_
     =
+  let () = 
+    printf "create_root_from_type_constant \n" 
+  in
   let { id = (id_pos, id_name) as id; _ } = ctx in
   match Env.get_typeconst env class_ id_name with
   | None ->
+    let () = 
+      printf "NONE-CRFTC \n" 
+    in
+    let typeconst_names = 
+      List.map ~f:(fun tc -> 
+        let (tc_name, _) = tc in tc_name
+      ) (Env.typeconsts class_)
+    in
+    let () =
+      List.iter ~f:(printf "Typeconsts: %s \n") typeconst_names
+    in
+    let similar_name = 
+      Env.most_similar id_name typeconst_names (fun tc_name -> tc_name)
+    in
+    let () =  
+      match similar_name with
+      | None -> ()
+      | Some similar_name -> (printf "Closest Name: %s \n") similar_name
+    in
     ( env,
       Missing
         (fun () ->

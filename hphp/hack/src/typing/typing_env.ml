@@ -684,6 +684,13 @@ let get_typeconst env class_ mid =
   end;
   Cls.get_typeconst class_ mid
 
+(* Used to access class typeconstants. *)
+let typeconsts class_ = 
+  let constants = 
+    Cls.typeconsts class_
+  in
+  constants
+
 (* Used to access class constants. *)
 let get_const env class_ mid =
   if not (Pos_or_decl.is_hhi (Cls.pos class_)) then begin

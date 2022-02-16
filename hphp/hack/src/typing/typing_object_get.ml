@@ -118,7 +118,6 @@ let smember_not_found
       Option.value_map hint ~default:[] ~f:(fun (_, _, new_text) ->
           [Quickfix.make ~title:("Change to ::" ^ new_text) ~new_text pos])
     in
-
     Typing_error.(
       apply ~on_error
       @@ primary

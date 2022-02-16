@@ -131,11 +131,16 @@ val consts : env -> class_decl -> (string * class_const) list
 (** Get type constant declaration from the appropriate backend and add dependency. *)
 val get_typeconst : env -> class_decl -> string -> typeconst_type option
 
+(** Get class type constants *)
+val typeconsts : class_decl -> (string * typeconst_type) list
+
 (** Get global constant declaration from the appropriate backend and add dependency. *)
 val get_gconst : env -> gconst_key -> gconst_decl option
 
 (** Get static member declaration of a class from the appropriate backend and add dependency. *)
 val get_static_member : bool -> env -> class_decl -> string -> class_elt option
+
+val most_similar : string -> 'a list -> ('a -> string) -> 'a option
 
 val suggest_static_member :
   bool -> class_decl -> string -> (Pos_or_decl.t * string) option
