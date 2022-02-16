@@ -5496,6 +5496,7 @@ and Secondary : sig
         class_name: string;
         class_pos: Pos_or_decl.t;
         member_name: string;
+        closest_member_name: string option;
         hint: ([ `instance | `static ] * Pos_or_decl.t * string) option;
         quickfixes: Quickfix.t list;
       }
@@ -5762,6 +5763,7 @@ end = struct
         class_name: string;
         class_pos: Pos_or_decl.t;
         member_name: string;
+        closest_member_name: string option;
         hint: ([ `instance | `static ] * Pos_or_decl.t * string) option;
         quickfixes: Quickfix.t list;
       }
@@ -6493,7 +6495,7 @@ end = struct
       [] )
 
   let smember_not_found
-      pos kind member_name class_name class_pos hint quickfixes =
+      pos kind member_name closest_member_name class_name class_pos hint quickfixes =
     let fixcount = 
       List.length quickfixes
     in
@@ -6507,12 +6509,15 @@ end = struct
     in
     let unsafe_pos = Pos_or_decl.unsafe_to_raw_pos pos in
     let quickfixes =
-      [
-        Quickfix.make 
-          ~title: ("Change type to " ^ Markdown_lite.md_codify(class_name)) 
-          ~new_text:class_name
-          unsafe_pos
-      ]
+      match closest_member_name with
+      | None -> []
+      | Some type_name -> 
+        [
+          Quickfix.make 
+            ~title: ("Change type to " ^ Markdown_lite.md_codify(type_name)) 
+            ~new_text:type_name
+            unsafe_pos
+        ]
     in
     (code, claim :: reasons, quickfixes)
 
@@ -6727,12 +6732,13 @@ end = struct
     | Rigid_tvar_escape { pos; name } ->
       Eval_result.single (rigid_tvar_escape pos name)
     | Smember_not_found
-        { pos; kind; member_name; class_name; class_pos; hint; quickfixes } ->
+        { pos; kind; member_name; closest_member_name; class_name; class_pos; hint; quickfixes } ->
       Eval_result.single
         (smember_not_found
            pos
            kind
            member_name
+           closest_member_name
            class_name
            class_pos
            hint

@@ -1,0 +1,252 @@
+<?hh
+// @generated from implementation
+
+/*
+ *  Copyright (c) 2004-present, Facebook, Inc.
+ *  All rights reserved.
+ *
+ *  This source code is licensed under the MIT license found in the
+ *  LICENSE file in the hphp/hsl/ subdirectory of this source tree.
+ *
+ */
+
+namespace HH\Lib\Str;
+
+use namespace HH\Lib\{_Private, C, Keyset, Vec, _Private\_Str};
+
+/**
+ * Returns the string with the first character capitalized.
+ *
+ * If the first character is already capitalized or isn't alphabetic, the string
+ * will be unchanged.
+ *
+ * - To capitalize all characters, see `Str\uppercase()`.
+ * - To capitalize all words, see `Str\capitalize_words()`.
+ */
+function capitalize(
+  string $string,
+)[]: string ;
+/**
+ * Returns the string with all words capitalized.
+ *
+ * Words are delimited by space, tab, newline, carriage return, form-feed, and
+ * vertical tab by default, but you can specify custom delimiters.
+ *
+ * - To capitalize all characters, see `Str\uppercase()`.
+ * - To capitalize only the first character, see `Str\capitalize()`.
+ */
+function capitalize_words(
+  string $string,
+  ?string $delimiters = null,
+)[]: string ;
+/**
+ * Returns a string representation of the given number with grouped thousands.
+ *
+ * If `$decimals` is provided, the string will contain that many decimal places.
+ * The optional `$decimal_point` and `$thousands_separator` arguments define the
+ * strings used for decimals and commas, respectively.
+ */
+function format_number(
+  num $number,
+  int $decimals = 0,
+  string $decimal_point = '.',
+  string $thousands_separator = ',',
+)[]: string ;
+/**
+ * Returns the string with all alphabetic characters converted to lowercase.
+ */
+function lowercase(
+  string $string,
+)[]: string ;
+/**
+ * Returns the string padded to the total length (in bytes) by appending the
+ * `$pad_string` to the left.
+ *
+ * If the length of the input string plus the pad string exceeds the total
+ * length, the pad string will be truncated. If the total length is less than or
+ * equal to the length of the input string, no padding will occur.
+ *
+ * To pad the string on the right, see `Str\pad_right()`.
+ * To pad the string to a fixed number of characters, see `Str\pad_left_l()`.
+ */
+function pad_left(
+  string $string,
+  int $total_length,
+  string $pad_string = ' ',
+)[]: string ;
+/**
+ * Returns the string padded to the total length (in bytes) by appending the
+ * `$pad_string` to the right.
+ *
+ * If the length of the input string plus the pad string exceeds the total
+ * length, the pad string will be truncated. If the total length is less than or
+ * equal to the length of the input string, no padding will occur.
+ *
+ * To pad the string on the left, see `Str\pad_left()`.
+ * To pad the string to a fixed number of characters, see `Str\pad_right_l()`.
+ */
+function pad_right(
+  string $string,
+  int $total_length,
+  string $pad_string = ' ',
+)[]: string ;
+/**
+ * Returns the input string repeated `$multiplier` times.
+ *
+ * If the multiplier is 0, the empty string will be returned.
+ */
+function repeat(
+  string $string,
+  int $multiplier,
+)[]: string ;
+/**
+ * Returns the "haystack" string with all occurrences of `$needle` replaced by
+ * `$replacement`.
+ *
+ * - For a case-insensitive search/replace, see `Str\replace_ci()`.
+ * - For multiple case-sensitive searches/replacements, see `Str\replace_every()`.
+ * - For multiple case-insensitive searches/replacements, see `Str\replace_every_ci()`.
+ */
+function replace(
+  string $haystack,
+  string $needle,
+  string $replacement,
+)[]: string ;
+/**
+ * Returns the "haystack" string with all occurrences of `$needle` replaced by
+ * `$replacement` (case-insensitive).
+ *
+ * - For a case-sensitive search/replace, see `Str\replace()`.
+ * - For multiple case-sensitive searches/replacements, see `Str\replace_every()`.
+ * - For multiple case-insensitive searches/replacements, see `Str\replace_every_ci()`.
+ */
+// not pure: str_ireplace uses global locale for capitalization
+function replace_ci(
+  string $haystack,
+  string $needle,
+  string $replacement,
+)[rx]: string ;
+/**
+ * Returns the "haystack" string with all occurrences of the keys of
+ * `$replacements` replaced by the corresponding values.
+ *
+ * Replacements are applied in the order they are specified in `$replacements`,
+ * and the new values are searched again for subsequent matches. For example,
+ * `dict['a' => 'b', 'b' => 'c']` is equivalent to `dict['a' => 'c']`, but
+ * `dict['b' => 'c', 'a' => 'b']` is not, despite having the same elements.
+ *
+ * If there are multiple overlapping matches, the match occuring earlier in
+ * `$replacements` (not in `$haystack`) takes precedence.
+ *
+ * - For a single case-sensitive search/replace, see `Str\replace()`.
+ * - For a single case-insensitive search/replace, see `Str\replace_ci()`.
+ * - For multiple case-insensitive searches/replacements, see `Str\replace_every_ci()`.
+ * - For not having new values searched again, see `Str\replace_every_nonrecursive()`.
+ */
+function replace_every(
+  string $haystack,
+  KeyedContainer<string, string> $replacements,
+)[]: string ;
+/**
+ * Returns the "haystack" string with all occurrences of the keys of
+ * `$replacements` replaced by the corresponding values (case-insensitive).
+ *
+ * Replacements are applied in the order they are specified in `$replacements`,
+ * and the new values are searched again for subsequent matches. For example,
+ * `dict['a' => 'b', 'b' => 'c']` is equivalent to `dict['a' => 'c']`, but
+ * `dict['b' => 'c', 'a' => 'b']` is not, despite having the same elements.
+ *
+ * If there are multiple overlapping matches, the match occuring earlier in
+ * `$replacements` (not in `$haystack`) takes precedence.
+ *
+ * - For a single case-sensitive search/replace, see `Str\replace()`.
+ * - For a single case-insensitive search/replace, see `Str\replace_ci()`.
+ * - For multiple case-sensitive searches/replacements, see `Str\replace_every()`.
+ * - For not having new values searched again, see `Str\replace_every_nonrecursive_ci()`.
+ */
+function replace_every_ci(
+  string $haystack,
+  KeyedContainer<string, string> $replacements,
+)[rx]: string ;
+/**
+ * Returns the "haystack" string with all occurrences of the keys of
+ * `$replacements` replaced by the corresponding values. Once a substring has
+ * been replaced, its new value will not be searched again.
+ *
+ * If there are multiple overlapping matches, the match occuring earlier in
+ * `$haystack` takes precedence. If a replacer is a prefix of another (like
+ * "car" and "carpet"), the longer one (carpet) takes precedence. The ordering
+ * of `$replacements` therefore doesn't matter.
+ *
+ * - For having new values searched again, see `Str\replace_every()`.
+ */
+function replace_every_nonrecursive(
+  string $haystack,
+  KeyedContainer<string, string> $replacements,
+)[rx]: string ;
+/**
+ * Returns the "haystack" string with all occurrences of the keys of
+ * `$replacements` replaced by the corresponding values (case-insensitive).
+ * Once a substring has been replaced, its new value will not be searched
+ * again.
+ *
+ * If there are multiple overlapping matches, the match occuring earlier in
+ * `$haystack` takes precedence. If a replacer is a case-insensitive prefix of
+ * another (like "Car" and "CARPET"), the longer one (carpet) takes precedence.
+ * The ordering of `$replacements` therefore doesn't matter.
+ *
+ * When two replacers are passed that are identical except for case,
+ * an InvalidArgumentException is thrown.
+ *
+ * Time complexity: O(a + length * b), where a is the sum of all key lengths and
+ * b is the sum of distinct key lengths (length is the length of `$haystack`)
+ *
+ * - For having new values searched again, see `Str\replace_every_ci()`.
+ */
+function replace_every_nonrecursive_ci(
+  string $haystack,
+  KeyedContainer<string, string> $replacements,
+)[rx]: string ;
+/** Reverse a string by bytes.
+ *
+ * @see `Str\reverse_l()` to reverse by characters instead.
+ */
+function reverse(string $string)[]: string ;
+/**
+ * Return the string with a slice specified by the offset/length replaced by the
+ * given replacement string.
+ *
+ * If the length is omitted or exceeds the upper bound of the string, the
+ * remainder of the string will be replaced. If the length is zero, the
+ * replacement will be inserted at the offset.
+ *
+ * Offset can be positive or negative. When positive, replacement starts from the
+ * beginning of the string; when negative, replacement starts from the end of the string.
+ *
+ * Some examples:
+ * - `Str\splice("apple", "orange", 0)` without `$length`, `$string` is replaced, resolving to `"orange"`
+ * - `Str\splice("apple", "orange", 3)` inserting at `$offset` `3` from the start of `$string` resolves to `"apporange"`
+ * - `Str\splice("apple", "orange", -2)` inserting at `$offset` `-2` from the end of `$string` resolves to `"apporange"`
+ * - `Str\splice("apple", "orange", 0, 0)` with `$length` `0`, `$replacement` is appended at `$offset` `0` and resolves to `"orangeapple"`
+ * - `Str\splice("apple", "orange", 5, 0)` with `$length` `0`, `$replacement` is appended at `$offset` `5` and resolves to `"appleorange"`
+ *
+ * Previously known in PHP as `substr_replace`.
+ */
+function splice(
+  string $string,
+  string $replacement,
+  int $offset,
+  ?int $length = null,
+)[]: string ;
+/**
+ * Returns the given string as an integer, or null if the string isn't numeric.
+ */
+function to_int(
+  string $string,
+)[]: ?int ;
+/**
+ * Returns the string with all alphabetic characters converted to uppercase.
+ */
+function uppercase(
+  string $string,
+)[]: string ;

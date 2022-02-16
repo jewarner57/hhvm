@@ -137,6 +137,7 @@ let create_root_from_type_constant ctx env root (_class_pos, class_name) class_
                      class_name;
                      class_pos = Cls.pos class_;
                      member_name = id_name;
+                     closest_member_name = similar_name;
                      hint = None;
                      quickfixes = [];
                    })) )

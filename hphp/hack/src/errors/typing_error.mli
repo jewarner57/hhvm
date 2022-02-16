@@ -1367,6 +1367,7 @@ module Secondary : sig
         class_name: string;
         class_pos: Pos_or_decl.t;
         member_name: string;
+        closest_member_name: string option;
         hint: ([ `instance | `static ] * Pos_or_decl.t * string) option;
         quickfixes: Quickfix.t list;
       }

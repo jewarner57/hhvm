@@ -1015,6 +1015,9 @@ let localize_no_subst_ env ~on_error ?report_cycle ty =
 let localize_hint_no_subst env ~ignore_errors ?report_cycle h =
   let (pos, _) = h in
   let h = Decl_hint.hint env.decl_env h in
+  let () = 
+      printf "typing_phase 1019 \n" 
+  in
   localize_no_subst_
     env
     ~on_error:
@@ -1027,6 +1030,9 @@ let localize_hint_no_subst env ~ignore_errors ?report_cycle h =
     h
 
 let localize_no_subst env ~ignore_errors ty =
+  let () = 
+      printf "typing_phase 1034 \n" 
+  in
   localize_no_subst_
     env
     ~on_error:
