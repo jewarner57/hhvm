@@ -131,9 +131,6 @@ val consts : env -> class_decl -> (string * class_const) list
 (** Get type constant declaration from the appropriate backend and add dependency. *)
 val get_typeconst : env -> class_decl -> string -> typeconst_type option
 
-(** Get class type constants *)
-val typeconsts : class_decl -> (string * typeconst_type) list
-
 (** Get global constant declaration from the appropriate backend and add dependency. *)
 val get_gconst : env -> gconst_key -> gconst_decl option
 
