@@ -1,0 +1,14 @@
+Add call to `parent::__construct();`
+
+<?hh
+
+class MyParent {
+  public function __construct() {}
+}
+
+class MyChild extends MyParent {
+  public function __construct() {
+    parent::__construct();
+    foo();
+  }
+}

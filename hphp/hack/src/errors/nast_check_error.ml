@@ -140,8 +140,23 @@ let dynamically_callable_reified attr_pos =
     []
 
 let no_construct_parent pos =
+  let (_, start_col) = Pos.line_column pos in
+  let adjPosStart = Pos.set_col_start (start_col + 15) pos in
+  let newPos = Pos.set_col_end (start_col + 15) adjPosStart in
+
+  let quickfixes =
+    Some
+      [
+        Quickfix.make
+          ~title:
+            ("Add call to " ^ Markdown_lite.md_codify "parent::__construct();")
+          ~new_text:"\n    parent::__construct();"
+          newPos;
+      ]
+  in
   User_error.make
     Error_code.(to_enum NoConstructParent)
+    ?quickfixes
     ( pos,
       Utils.sl
         [
